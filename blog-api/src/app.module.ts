@@ -6,7 +6,7 @@ import { BlogModule } from './blog/blog.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost/nest-blog-project', {
+    MongooseModule.forRoot('mongodb://localhost:27017/nest-blog-project', {
       useNewUrlParser: true,
     }),
     BlogModule,
