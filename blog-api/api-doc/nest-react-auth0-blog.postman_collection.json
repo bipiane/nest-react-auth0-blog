@@ -1,0 +1,287 @@
+{
+  "info": {
+    "_postman_id": "8c07d21c-6ec5-487c-9821-a6bd12df97a3",
+    "name": "nest-react-auth0-blog",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "OAuth Token",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "4a81b7e4-9a6c-4f2d-b232-4be98c74ed77",
+            "exec": [
+              "var data = JSON.parse(responseBody);",
+              "postman.setEnvironmentVariable(\"access_token\", data.access_token);"
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "e8100637-aa67-41e1-bccd-365bf6e0fbbf",
+            "exec": [
+              "if(!postman.getEnvironmentVariable(\"AUTH0_DOMAIN\")){",
+              "  postman.setEnvironmentVariable(\"AUTH0_DOMAIN\", 'YOUR_AUTH0_DOMAIN');  ",
+              "}",
+              "",
+              "if(!postman.getEnvironmentVariable(\"CLIENT_ID\")){",
+              "  postman.setEnvironmentVariable(\"CLIENT_ID\", 'YOUR_AUTH0_CLIENT_ID');  ",
+              "}",
+              "",
+              "if(!postman.getEnvironmentVariable(\"CLIENT_SECRET\")){",
+              "  postman.setEnvironmentVariable(\"CLIENT_SECRET\", 'YOUR_AUTH0_CLIENT_SECRET');  ",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "content-type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"client_id\": \"{{CLIENT_ID}}\",\n    \"client_secret\": \"{{CLIENT_SECRET}}\",\n    \"audience\": \"http://localhost:5000/api\",\n    \"grant_type\": \"client_credentials\"\n}"
+        },
+        "url": {
+          "raw": "https://{{AUTH0_DOMAIN}}/oauth/token",
+          "protocol": "https",
+          "host": ["{{AUTH0_DOMAIN}}"],
+          "path": ["oauth", "token"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "add Post",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "title",
+              "value": "Hola Mundo",
+              "type": "text"
+            },
+            {
+              "key": "description",
+              "value": "Mi primer hola mundo",
+              "type": "text"
+            },
+            {
+              "key": "body",
+              "value": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse non aliquam neque, at congue dui. Interdum et malesuada fames ac ante ipsum primis in faucibus",
+              "type": "text"
+            },
+            {
+              "key": "author",
+              "value": "ivanpianetti23@gmail.com",
+              "type": "text"
+            },
+            {
+              "key": "date_posted",
+              "value": "21/03/2020",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:5000/blog/post",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["blog", "post"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "index Posts",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": []
+        },
+        "url": {
+          "raw": "http://localhost:5000/blog/posts",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["blog", "posts"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "show Post",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": []
+        },
+        "url": {
+          "raw": "http://localhost:5000/blog/posts?postID=5e76375db2fdf702996816e2",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["blog", "posts"],
+          "query": [
+            {
+              "key": "postID",
+              "value": "5e76375db2fdf702996816e2"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "edit Post",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "title",
+              "value": "Hola",
+              "type": "text"
+            },
+            {
+              "key": "description",
+              "value": "asdf",
+              "type": "text"
+            },
+            {
+              "key": "body",
+              "value": "Hola Mundo!!!!!!!",
+              "type": "text"
+            },
+            {
+              "key": "author",
+              "value": "Ivan Pianetti",
+              "type": "text"
+            },
+            {
+              "key": "date_posted",
+              "value": "21/03/2020",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:5000/blog/edit?postID=5e76361ca2abe7028c7d590d",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["blog", "edit"],
+          "query": [
+            {
+              "key": "postID",
+              "value": "5e76361ca2abe7028c7d590d"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "delete Post",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": []
+        },
+        "url": {
+          "raw": "http://localhost:5000/blog/delete?postID=5e76361ca2abe7028c7d590d",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["blog", "delete"],
+          "query": [
+            {
+              "key": "postID",
+              "value": "5e76361ca2abe7028c7d590d"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "protocolProfileBehavior": {}
+}
